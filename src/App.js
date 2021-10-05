@@ -6,9 +6,13 @@ import TodosForm from './components/TodosForm';
 
 const App = () => {
 
-  const initialState = localStorage.getItem('todos') 
-    ? JSON.parse(localStorage.getItem('todos'))
+  const todosStored = localStorage.getItem('todos') 
+
+  const initialState = todosStored 
+    ? JSON.parse(todosStored)
     : []
+  
+  const displayCompleted = localStorage.getItem('displayCompleted') === 'true'
 
   const [todos, setTodos] = useState(initialState)
   const todosLength = todos.length
@@ -17,8 +21,11 @@ const App = () => {
     localStorage.setItem('todos', JSON.stringify(todos))
   }, [todos])
 
-  const [todosCompleted, setTodosCompleted] = useState(true)
-  // console.log(todos);
+  const [todosCompleted, setTodosCompleted] = useState(displayCompleted)
+
+  useEffect(()=> {
+    localStorage.setItem('displayCompleted', todosCompleted)
+  }, [todosCompleted])
 
   return (
     <div className="contenedor">
